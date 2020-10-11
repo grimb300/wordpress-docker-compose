@@ -24,13 +24,22 @@
     $ apt-get update
     $ apt-get install subversion
     $ svn --version
-6. Now follow the post-installation instructions here (https://www.smashingmagazine.com/2017/12/automated-testing-wordpress-plugins-phpunit/)
+7. Now follow the post-installation instructions here (https://www.smashingmagazine.com/2017/12/automated-testing-wordpress-plugins-phpunit/)
    NOTE: Since currently running as root, have to run all commands with --allow-root (need to fix this)
     $ wp scaffold plugin-tests <plugin-name> --allow-root
     $ cd <path-to-plugin>
     $ bin/install-wp-tests.sh wordpress_test <WordPress-DB_USER> '<WordPress-DB_PASSWORD>' localhost latest
     TODO: This is where I get stuck. The installation script assumes mysqladmin for creating the testing database,
           but I'm using mariadb and it is running in another container... May need to rethink this.
-          There is a command line option to skip the database setup, I might be able to use this and then manually setup the database via myphpadmin:
-    $ bin/install-wp-tests.sh wordpress_test <WordPress-DB_USER> '<WordPress-DB_PASSWORD>' localhost latest true
+          There is a command line option to skip the database setup, I might be able to use this and then manually setup the database via myphpadmin.
+    Success! Got it to work with:
+    $ bin/install-wp-tests.sh wordpress_test root 'password' mysql latest true
+8. Create the wordpress_test database. First get a bash shell on the mysql container
+    $ docker ps -a
+    $ docker exec -it wordpress_mysql bash
+   Then create the database:
+    $ mysqladmin create wordpress_test --user="root" --password="password"
+9. Run the default test back on the wordpress container
+    $ phpunit tests/test-sample.php
+10. Need to explore this Travis CI stuff
 
