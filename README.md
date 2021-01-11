@@ -1,67 +1,60 @@
+# WordPress development environment using Docker
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+This development environment is the confluence of the following:
 
-# Deploy Wordpress on Localhost and in Production using Docker Compose
+- [kassambara/wordpress-docker-compose](https://github.com/kassambara/wordpress-docker-compose) - My repository is a direct fork. I liked the Makefile methodology and autoconfigure. It also added [WP-CLI](https://wp-cli.org/) to a "standard" WordPress Docker environment. See [README](https://github.com/kassambara/wordpress-docker-compose) for more information.
+- [chriszarate/docker-compose-wordpress](https://github.com/chriszarate/docker-compose-wordpress) - This repository adds [PHPUnit](https://phpunit.de/) for testing purposes. See [README](https://phpunit.de/) for more information.
+- My own experience with customizing a more standard WordPress Docker environment to suit my needs. I've parameterized the base environment to be more friendly to having multiple environments running simultaneously.
 
-Related blog post:
+Getting started:
 
-  - [WordPress Local Development Using Docker
-    Compose](https://www.datanovia.com/en/lessons/wordpress-local-development-using-docker-compose/):
-    Deploy Wordpress on localhost using docker
-  - [Docker WordPress Production
-    Deployment](https://www.datanovia.com/en/lessons/docker-wordpress-production-deployment/):
-    Step-by-step guide to deploy WordPress online using docker-compose
-  - [Using Docker WordPress Cli to Manage WordPress
-    Websites](https://www.datanovia.com/en/lessons/using-docker-wordpress-cli-to-manage-wordpress-websites/):
-    Commande line interface for managing a WordPress website
+- Download the Docker environment:
+  ``` bash
+  git clone https://github.com/grimb300/wordpress-docker-compose.git
+  cd wordpress-docker-compose
+  # Note: Right now my changes are on branch my-mods
+  git checkout my-mods
+  ```
+- Edit .env (if necessary):
+  - If running multiple instances, update the ports used:
+    ```
+    WORDPRESS_WEBSITE_URL="http://localhost:8080"
+    WORDPRESS_WEBSITE_URL_WITHOUT_HTTP=localhost:8080
+    WORDPRESS_PORT=8080
+    PHPMYADMIN_PORT=8084
+    ```
+  - Credentials:
+    ```
+    DATABASE_PASSWORD=password
+    DATABASE_USER=root
+    WORDPRESS_ADMIN_USER="foo"
+    WORDPRESS_ADMIN_PASSWORD="bar"
+    WORDPRESS_ADMIN_EMAIL="your-email@example.com"
+    ```
+- Autoinstall (and start) the environment:
+  ``` bash
+  make autoinstall
+  ```
+- Shut down the environment:
+  ``` bash
+  make down
+  ```
+- Restart the environment (after initial autoinstall)
+  ``` bash
+  make start
+  ```
+- WP-CLI (WordPress Command Line Interface)
+  Could be added to .aliases.
+  ``` bash
+  wp="docker-compose run --rm wpcli"
+  wp <command>
+  ```
+- Setup/Run PHPUnit tests
+  ``` bash
+  ???
+  ```
 
-The installation tool kit, provided here, include:
+Future work:
 
-  - Nginx web server
-  - MariaDB/MySQL used for Wordpress database
-  - phpMyAdmin interface to connect to your MySQL database
-  - WP-Cli: Wordpress Command Line Interface
-  - Makefile directives for automatization.
-
-You can automatically deploy a local docker wordpress site in 5 minutes
-using the following commands:
-
-``` bash
-# Download a wordpress docker-compose example
-git clone https://github.com/kassambara/wordpress-docker-compose
-cd wordpress-docker-compose
-# Build and start installation
-docker-compose up -d --build
-```
-
-Visit your site at <http://localhost> and your database via phpMyAdmin
-at <http://localhost:8080>.
-
-Default identification for your wordpress website admin:
-
-  - `Username: wordpress` and
-  - `Password: wordpress`
-
-Default identification for the phpMyAdmin interface:
-
-  - `Username: root` and
-  - `Password: password`
-
-**Useful set of commands to know**:
-
-``` bash
-# Stop and remove containers
-docker-compose down
-# Build, and start the wordpress website
-docker-compose up -d --build
-# Reset everything
-docker-compose down
-rm -rf certs/* certs-data/* logs/nginx/* mysql/* wordpress/*
-```
-
-## References
-
-  - [WordPress: with Nginx web server in
-    Docker](https://github.com/mjstealey/wordpress-nginx-docker)
-  - [Quickstart: Compose and
-    WordPress](https://docs.docker.com/compose/wordpress/)
+- Automate the installation more. This still requires some amount of editing config files before the initial install.
+- Create a local proxy so launching an environment automatically chooses an open port AND allows using names (example: wp-test-env.dev)
