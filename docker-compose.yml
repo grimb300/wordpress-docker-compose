@@ -1,12 +1,16 @@
 version: '3.6'
 services:
 
+  # This uses my Dockerfile which is derived from the official wordpress image
   wordpress:
-    image: wordpress:${WORDPRESS_VERSION:-latest}
+    build: ./wordpress_with_phpunit/
+    image: wordpress_with_phpunit
+    # image: wordpress:${WORDPRESS_VERSION:-latest}
     container_name: ${COMPOSE_PROJECT_NAME:-wordpress}
     volumes:
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/php.ini
       - ${WORDPRESS_DATA_DIR:-./wordpress}:/var/www/html
+      - ./testsuite_wp:/tmp
     environment:
       - WORDPRESS_DB_NAME=${COMPOSE_PROJECT_NAME:-wordpress}
       - WORDPRESS_TABLE_PREFIX=${WORDPRESS_TABLE_PREFIX:-wp_}
@@ -66,5 +70,19 @@ services:
       - WAIT_HOSTS_TIMEOUT=${WAIT_HOSTS_TIMEOUT:-300}
       - WAIT_SLEEP_INTERVAL=${WAIT_SLEEP_INTERVAL:-30}
       - WAIT_HOST_CONNECT_TIMEOUT=${WAIT_HOST_CONNECT_TIMEOUT:-30}
+
+  # PHPUnit test environment
+  # Based on repo (https://github.com/chriszarate/docker-compose-wordpress/)
+  # Commenting out, it never really worked the right way anyway
+  # phpunit:
+  #   build: ./phpunit/
+  #   image: phpunit
+  #   container_name: ${COMPOSE_PROJECT_NAME}_phpunit
+  #   volumes:
+  #     - ${WORDPRESS_DATA_DIR:-./wordpress}/wp-content/plugins/${PHPUNIT_PLUGIN_UNDER_TEST}:/app
+  #     # - ./testsuite:/tmp
+  #   depends_on:
+  #     - wordpress
+  #     - mysql
 
 

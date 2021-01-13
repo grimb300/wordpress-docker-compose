@@ -1,0 +1,3 @@
+alias wp='docker-compose run --rm wpcli'
+alias install-tests='docker-compose run --rm wordpress install-tests.sh'
+alias run-tests='docker-compose run --rm wordpress run-tests.sh'

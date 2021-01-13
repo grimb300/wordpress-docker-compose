@@ -1,0 +1,12 @@
+1. Create test plugin:
+    $ mkdir wordpress/wp-content/plugins/wp-meta-verify
+    $ touch woordpress/wp-content/plugins/wp-meta-verify/wp-meta-verify.php
+    Get plugin code from here (there is a typo to fix, backslash in front of square bracket): https://www.smashingmagazine.com/2017/12/automated-testing-wordpress-plugins-phpunit/
+    $ sudo chmod -R a+w wordpress/wp-content/plugins/wp-meta-verify
+2. Create test scaffold:
+    $ wp="docker-compose run --rm wplcli"
+    $ wp scaffold plugin-tests wp-meta-verify
+3. Setup phpunit:
+    $ docker-compose run --rm phpunit bin/install-wp-tests.sh wordpress_test root 'password' mysql latest
+4. Run the tests (right now just test-sample.php)
+    $ docker-compose run --rm phpunit phpunit

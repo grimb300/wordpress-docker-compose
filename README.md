@@ -43,15 +43,17 @@ Getting started:
   ``` bash
   make start
   ```
-- WP-CLI (WordPress Command Line Interface)
-  Could be added to .aliases.
+- WP-CLI (WordPress Command Line Interface) Alias for wp added to wordpress_with_phpunit/.aliases
   ``` bash
   wp="docker-compose run --rm wpcli"
   wp <command>
   ```
 - Setup/Run PHPUnit tests
   ``` bash
-  ???
+  source wordpress_with_phpunit/.aliases
+  wp scaffold plugin-tests <plugin-name>
+  install-tests <plugin-name>
+  run-tests <plugin-name> <test-file>
   ```
 
 Future work:

@@ -12,3 +12,6 @@ logs/nginx/*
 !logs/nginx/.keep
 _trash
 *.Rproj
+testsuite_wp/*
+!testsuite_wp/.keep
+.vscode
