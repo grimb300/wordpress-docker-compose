@@ -12,8 +12,6 @@ Getting started:
   ``` bash
   git clone https://github.com/grimb300/wordpress-docker-compose.git
   cd wordpress-docker-compose
-  # Note: Right now my changes are on branch my-mods
-  git checkout my-mods
   ```
 - Edit .env (if necessary):
   - If running multiple instances, update the ports used:
@@ -62,3 +60,4 @@ Future work:
 
 - Automate the installation more. This still requires some amount of editing config files before the initial install.
 - Create a local proxy so launching an environment automatically chooses an open port AND allows using names (example: wp-test-env.dev)
+- Figure out how to keep testsuite_wp permissions 'drwxrwxrwt' instead of having to chmod 1777 it
