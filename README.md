@@ -9,7 +9,7 @@ This development environment is the confluence of the following:
 Getting started:
 
 - Download the Docker environment:
-  ``` bash
+  ```bash
   git clone https://github.com/grimb300/wordpress-docker-compose.git
   cd wordpress-docker-compose
   ```
@@ -30,26 +30,43 @@ Getting started:
     WORDPRESS_ADMIN_EMAIL="your-email@example.com"
     ```
 - Autoinstall (and start) the environment:
-  ``` bash
+  ```bash
   # Need to make testsuite_wp (/tmp) globally rwx and sticky
   chmod 1777 testsuite_wp
   make autoinstall
   ```
+  - After installation, make wp-config.php writable
+  ```bash
+  sudo chmod a+w wordpress/wp-config.php
+  ```
+  - Then add configs to enable debug messages...
+  ```
+  //define( 'WP_DEBUG', false );
+  /* Turn on debug messages, dumped to wp-content/debug.log */
+  define( 'WP_DEBUG', true );
+  define( 'WP_DEBUG_LOG', true );
+  define( 'WP_DEBUG_DISPLAY', false );
+  ```
+  - ...and enable the download of plugins/themes/updates
+  ```
+  /* Needed to download/update plugins and themes */
+  define('FS_METHOD', 'direct');
+  ```
 - Shut down the environment:
-  ``` bash
+  ```bash
   make down
   ```
 - Restart the environment (after initial autoinstall)
-  ``` bash
+  ```bash
   make start
   ```
 - WP-CLI (WordPress Command Line Interface) Alias for wp added to wordpress_with_phpunit/.aliases
-  ``` bash
+  ```bash
   wp="docker-compose run --rm wpcli"
   wp <command>
   ```
 - Setup/Run PHPUnit tests
-  ``` bash
+  ```bash
   source wordpress_with_phpunit/.aliases
   wp scaffold plugin-tests <plugin-name>
   install-tests <plugin-name>
