@@ -33,6 +33,8 @@ Getting started:
     ```
 - Autoinstall (and start) the environment:
   ``` bash
+  # Need to make testsuite_wp (/tmp) globally rwx and sticky
+  chmod 1777 testsuite_wp
   make autoinstall
   ```
 - Shut down the environment:
